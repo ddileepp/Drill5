@@ -1,23 +1,19 @@
-function groupByRole(dataArray) {
-  if (!Array.isArray(dataArray)) {
-    throw new Error("Expected an array of employees");
-  }
+function roleBased(data){
+    const roleBasedPeople = {};
 
-  var acc = {};
+    for(let i=0;i<data.data.length;i++){
+        const userData = data.data[i];
+        const role = userData.hr[0];
 
-  for (var i = 0; i < dataArray.length; i++) {
-    var emp = dataArray[i];
-    var role = emp.hr[0];
-    var name = emp.name.join(" ");
-
-    if (!acc[role]) {
-      acc[role] = [];
+        if(roleBasedPeople.hasOwnProperty(role)){
+            roleBasedPeople[role].push((userData.name[0]+" "+userData.name[1]));
+        }
+        else{
+            roleBasedPeople[role] = [(userData.name[0]+" "+userData.name[1])];
+        }
     }
-    acc[role].push(name);
-  }
 
-  return acc;
+    return roleBasedPeople;
 }
 
-module.exports = groupByRole;
-
+module.exports = roleBased;

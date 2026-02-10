@@ -1,29 +1,25 @@
-function roleSalary(data){
-    const roleBasedAvgSalary = {};
+function roleSalary(data) {
+  const roleMap = data.data.reduce(function (acc, person) {
+    const role = person.hr[0];
 
-    for(let i=0;i<data.data.length;i++){
+    // Remove $ and commas, convert to number
+    const salary = Number(person.hr[1].replace(/[$,]/g, ""));
 
-        const userData = data.data[i];
-        let salary = Number(userData.hr[1].replace(/[$,]/g,''));
-        const role = userData.hr[0];
-
-        if(roleBasedAvgSalary.hasOwnProperty(role)){
-            roleBasedAvgSalary[role].totalSalary+=salary;
-            roleBasedAvgSalary[role].count++;
-        }
-        else{
-            roleBasedAvgSalary[role] = {
-                totalSalary : salary,
-                count : 1
-            };
-        }
+    if (!acc[role]) {
+      acc[role] = { total: 0, count: 0 };
     }
 
-    const avgSalaryResult = {}
+    acc[role].total += salary;
+    acc[role].count += 1;
 
-    for(let role in roleBasedAvgSalary){
-        avgSalaryResult[role] = (roleBasedAvgSalary[role].totalSalary/roleBasedAvgSalary[role].count).toFixed(2);
-    }
-    return avgSalaryResult;
+    return acc;
+  }, {});
+
+  // Convert totals to averages
+  return Object.keys(roleMap).reduce(function (result, role) {
+    result[role] = Math.round(roleMap[role].total / roleMap[role].count);
+    return result;
+  }, {});
 }
+
 module.exports = roleSalary;

@@ -17,3 +17,4 @@ function roleBased(data){
 }
 
 module.exports = roleBased;
+/*end*/

@@ -1,20 +1,15 @@
-function roleBased(data){
-    const roleBasedPeople = {};
+function roleBased(data) {
+  return data.data.reduce(function (acc, person) {
+    const role = person.hr[0]; // Role
+    const fullName = person.name.join(" ");
 
-    for(let i=0;i<data.data.length;i++){
-        const userData = data.data[i];
-        const role = userData.hr[0];
-
-        if(roleBasedPeople.hasOwnProperty(role)){
-            roleBasedPeople[role].push((userData.name[0]+" "+userData.name[1]));
-        }
-        else{
-            roleBasedPeople[role] = [(userData.name[0]+" "+userData.name[1])];
-        }
+    if (!acc[role]) {
+      acc[role] = [];
     }
 
-    return roleBasedPeople;
+    acc[role].push(fullName);
+    return acc;
+  }, {});
 }
 
 module.exports = roleBased;
-/*end*/
